@@ -42,14 +42,21 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     public function ideas(): HasMany
     {
         return $this->hasMany(Idea::Class);
     }
+
     public function ideasLiked(): BelongsToMany
     {
         return $this->belongsToMany(Idea::class);
+    }
+
+    public function iLikeIt($ideaId): bool
+    {
+        return $this->ideasLiked()->where('idea_id', $ideaId)->exists();
     }
 }
